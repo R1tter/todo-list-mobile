@@ -29,17 +29,10 @@ const App: React.FC = () => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <Box style={globalStyles.container} alignItems="center" justifyContent="center">
-            <Heading style={{ ...globalStyles.heading, color: '#FFD700', marginBottom: 20 }}>
+            <Heading style={globalStyles.heading}>
               TODO LIST
             </Heading>
-            <Box
-              bg="white"
-              p={4}
-              borderRadius={10}
-              shadow={3}
-              width="90%"
-              alignItems="center"
-            >
+            <Box style={globalStyles.outerBox}>
               <TaskList 
                 listName="Tasks" 
                 tasks={tasks} 
@@ -47,15 +40,15 @@ const App: React.FC = () => {
                 onEditTask={handleEditTask}
                 onRemove={removeTask}
               />
-
+  
               <Input 
                 placeholder="New task title" 
                 value={newTaskTitle} 
                 onChangeText={setNewTaskTitle} 
                 onSubmitEditing={handleAddNewTask}
               />
-              <Button onPress={handleAddNewTask}>
-                <Text>Add New Task</Text>
+              <Button style={globalStyles.button} onPress={handleAddNewTask}>
+                <Text style={globalStyles.buttonText}>Add New Task</Text>
               </Button>
             </Box>
           </Box>

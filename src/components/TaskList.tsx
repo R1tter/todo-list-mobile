@@ -1,6 +1,7 @@
 import React from 'react';
 import { VStack, Heading } from 'native-base';
 import TaskItem from './TaskItem';
+import globalStyles from '../styles/globalStyles';
 
 interface Task {
   id: string;
@@ -20,9 +21,9 @@ interface TaskListProps {
 const TaskList: React.FC<TaskListProps> = ({ listName, tasks, onToggleTask, onRemove, onEditTask }) => {
   return (
     <VStack space={4}>
-      <Heading size="md" color="#FFD700">{listName}</Heading>
+      <Heading size="md" style={globalStyles.listTitle}>{listName}</Heading>
       {tasks.map(task => (
-        <TaskItem key={task.id} task={task} onToggle={onToggleTask} onRemove={onRemove} onEditTask={onEditTask} /> 
+        <TaskItem key={task.id} task={task} onToggle={onToggleTask} onEditTask={onEditTask} onRemove={onRemove} />
       ))}
     </VStack>
   );
