@@ -1,59 +1,82 @@
-import React from 'react';
-import { Text } from 'react-native'; // Importando o Text
-import { NativeBaseProvider, Box, VStack, Heading, Button } from 'native-base';
-import TaskList from './src/components/TaskList';
+import React, { useState } from 'react';
+import { Text, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { NativeBaseProvider, Box, VStack, Heading, Button, Checkbox, Input } from 'native-base';
 import globalStyles from './src/styles/globalStyles';
+import TaskList from './src/components/TaskList';
 
 const App: React.FC = () => {
-  // Exemplo de dados
-  const tasksData = [
-    {
-      listName: 'Daily Tasks',
-      tasks: [
-        { id: '1', title: 'Wake up', completed: true },
-        { id: '2', title: 'Brush teeth', completed: false },
-        { id: '3', title: 'Have breakfast', completed: false },
-      ],
-    },
-    {
-      listName: 'Work Tasks',
-      tasks: [
-        { id: '4', title: 'Check emails', completed: true },
-        { id: '5', title: 'Attend team meeting', completed: false },
-      ],
-    },
-  ];
+  
+  const [tasks, setTasks] = useState([
+    { id: '1', title: 'Wake up', completed: true },
+    { id: '2', title: 'Brush teeth', completed: false },
+  ]);
+
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+
+  const handleAddTask = () => {
+    if (newTaskTitle) {
+      setTasks([...tasks, { id: Date.now().toString(), title: newTaskTitle, completed: false }]);
+      setNewTaskTitle('');
+    }
+  };
+
+  const handleToggleTaskCompletion = (taskId: string) => {
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const handleRemoveTask = (taskId: string) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
+
+  const handleEditTask = (taskId: string, newTitle: string) => {
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, title: newTitle } : task
+    ));
+  };
+  
 
   return (
     <NativeBaseProvider>
-      <Box style={globalStyles.container}>
-        <Box
-          bg="white"
-          p={4}
-          borderRadius={10}
-          shadow={3}
-          width="90%" 
-        >
-          <VStack space={4} alignItems="center">
-            <Heading style={globalStyles.heading} mb={6}>
-              Todo List App
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={globalStyles.container}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          <Box style={globalStyles.container} alignItems="center" justifyContent="center">
+            <Heading style={{ ...globalStyles.heading, color: '#FFD700', marginBottom: 20 }}>
+              TODO LIST
             </Heading>
-            {tasksData.map((list, index) => (
-              <TaskList key={index} listName={list.listName} tasks={list.tasks} />
-            ))}
-            <Button 
-              _text={{ color: globalStyles.buttonText.color }} 
-              bg={globalStyles.button.backgroundColor}
-              p={globalStyles.button.padding}
-              borderRadius={globalStyles.button.borderRadius}
-              m={globalStyles.button.margin}
-              onPress={() => console.log('Add new task')}
+            <Box
+              bg="white"
+              p={4}
+              borderRadius={10}
+              shadow={3}
+              width="90%"
+              alignItems="center"
             >
-              Add New Task
-            </Button>
-          </VStack>
-        </Box>
-      </Box>
+              <TaskList 
+                listName="Tasks" 
+                tasks={tasks} 
+                onToggleTask={handleToggleTaskCompletion}
+                onEditTask={handleEditTask}
+                onRemove={handleRemoveTask}
+              />
+
+              <Input 
+                placeholder="New task title" 
+                value={newTaskTitle} 
+                onChangeText={setNewTaskTitle} 
+                onSubmitEditing={handleAddTask}
+              />
+              <Button onPress={handleAddTask}>
+                <Text>Add New Task</Text>
+              </Button>
+            </Box>
+          </Box>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </NativeBaseProvider>
   );
 };
