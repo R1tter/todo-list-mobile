@@ -9,27 +9,27 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#FFD700',
-    padding: 15, // Aumento do padding para um botão maior
+    padding: 15, 
     borderRadius: 5,
     margin: 10,
   },
   buttonText: {
     color: '#2E2E2E',
-    fontSize: 18, // Aumento do tamanho da fonte
-    fontWeight: 'bold', // Fonte em negrito
+    fontSize: 18, 
+    fontWeight: 'bold',
   },
   checkbox: {
     borderColor: '#FFD700',
   },
   text: {
-    color: '#F5F5F5', // Cor off-white para o texto comum
-    fontSize: 16, // Tamanho da fonte padrão maior
-    fontWeight: 'bold', // Fonte em negrito
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   heading: {
-    fontSize: 24, // Tamanho da fonte do cabeçalho maior
-    fontWeight: 'bold', // Fonte em negrito
-    color: '#F5F5F5', // Cor off-white para o cabeçalho
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    color: '#F5F5F5',
   },
 });
 
