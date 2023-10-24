@@ -1,41 +1,25 @@
 import React, { useState } from 'react';
-import { Text, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { NativeBaseProvider, Box, VStack, Heading, Button, Checkbox, Input } from 'native-base';
+import { Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { NativeBaseProvider, Box, VStack, Heading, Button, Input } from 'native-base';
 import globalStyles from './src/styles/globalStyles';
 import TaskList from './src/components/TaskList';
+import useTasks from './src/hooks/useTasks';
 
 const App: React.FC = () => {
   
-  const [tasks, setTasks] = useState([
-    { id: '1', title: 'Wake up', completed: true },
-    { id: '2', title: 'Brush teeth', completed: false },
-  ]);
-
+  const { tasks, addTask, toggleTaskCompletion, removeTask, editTask } = useTasks();
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  const handleAddTask = () => {
+  const handleAddNewTask = () => {
     if (newTaskTitle) {
-      setTasks([...tasks, { id: Date.now().toString(), title: newTaskTitle, completed: false }]);
+      addTask(newTaskTitle);
       setNewTaskTitle('');
     }
   };
 
-  const handleToggleTaskCompletion = (taskId: string) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ));
-  };
-
-  const handleRemoveTask = (taskId: string) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
-  };
-
   const handleEditTask = (taskId: string, newTitle: string) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, title: newTitle } : task
-    ));
+    editTask(taskId, newTitle);
   };
-  
 
   return (
     <NativeBaseProvider>
@@ -59,18 +43,18 @@ const App: React.FC = () => {
               <TaskList 
                 listName="Tasks" 
                 tasks={tasks} 
-                onToggleTask={handleToggleTaskCompletion}
+                onToggleTask={toggleTaskCompletion}
                 onEditTask={handleEditTask}
-                onRemove={handleRemoveTask}
+                onRemove={removeTask}
               />
 
               <Input 
                 placeholder="New task title" 
                 value={newTaskTitle} 
                 onChangeText={setNewTaskTitle} 
-                onSubmitEditing={handleAddTask}
+                onSubmitEditing={handleAddNewTask}
               />
-              <Button onPress={handleAddTask}>
+              <Button onPress={handleAddNewTask}>
                 <Text>Add New Task</Text>
               </Button>
             </Box>
